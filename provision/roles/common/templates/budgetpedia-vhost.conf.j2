@@ -1,0 +1,25 @@
+server {
+  listen 80;
+
+  root /var/www/budgetpedia.ca;
+  index index.html index.htm;
+
+  # Make site accessible from http://localhost/
+  server_name budgetpedia;
+
+  location / {
+    # First attempt to serve request as file, then
+    # as directory, then fall back to displaying a 404.
+    try_files $uri $uri/ /index.html;
+  }
+
+  # proxy all requests that start with "/api" to hapijs,
+  # which should be running on port 8000
+  location /api {
+    proxy_pass http://localhost:8000;
+  }
+
+  # for virtualbox compatibility: see
+  # https://www.nginx.com/resources/wiki/start/topics/tutorials/config_pitfalls/#virtualbox
+  sendfile off;
+}

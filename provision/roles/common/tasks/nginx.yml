@@ -1,0 +1,33 @@
+---
+
+- name: nginx - install
+  apt:
+    name: nginx
+    state: latest
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: nginx - ufw allow
+  ufw:
+    rule: allow
+    name: "Nginx Full"
+
+- name: nginx - vhost template
+  template:
+    src: budgetpedia-vhost.conf.j2
+    dest: /etc/nginx/sites-available/budgetpedia.conf
+
+- name: nginx - enable vhost
+  file:
+    state: link
+    src: /etc/nginx/sites-available/budgetpedia.conf
+    dest: /etc/nginx/sites-enabled/budgetpedia.conf
+  notify:
+    - reload_nginx
+
+- name: nginx - remove default vhost
+  file:
+    dest: "/etc/nginx/sites-enabled/default"
+    state: absent
+  notify:
+    - reload_nginx

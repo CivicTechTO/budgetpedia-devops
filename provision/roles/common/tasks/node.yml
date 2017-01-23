@@ -1,0 +1,14 @@
+---
+
+# Node: NOT USING THIS YET
+
+- name: node - download n install script
+  get_url:
+    url: https://git.io/n-install
+    dest: /tmp/n-install.sh
+    validate_certs: false
+
+- name: node - install n
+  shell: "/tmp/n-install.sh"
+
+# - name: node -
